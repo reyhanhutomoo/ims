@@ -55,11 +55,11 @@
                                     @foreach ($holidays as $index => $holiday)
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
-                                        <td>{{ $holiday->name }}</td>
-                                        <td>{{ $holiday->start_date->format('F') }}</td>
-                                        <td>{{ $holiday->start_date->format('d')}}</td>
-                                        @if($holiday->end_date) 
-                                        <td>{{ $holiday->end_date->format('d') }}</td>
+                                        <td>{{ $holiday->nama }}</td>
+                                        <td>{{ $holiday->tanggal_mulai->format('F') }}</td>
+                                        <td>{{ $holiday->tanggal_mulai->format('d')}}</td>
+                                        @if($holiday->tanggal_selesai)
+                                        <td>{{ $holiday->tanggal_selesai->format('d') }}</td>
                                         @else
                                         <td>Sehari</td>
                                         @endif

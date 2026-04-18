@@ -63,9 +63,9 @@
                                     <tr class="text-center">
                                         <td>{{ $index + 1 }}</td>
                                         <td>{{ $leave->created_at->format('d-m-Y') }}</td>
-                                        <td>{{ $leave->employee->name }}</td>
-                                        <td>{{ $leave->employee->division->name }}</td>
-                                        <td>{{ $leave->reason }}</td>
+                                        <td>{{ $leave->employee->nama }}</td>
+                                        <td>{{ $leave->employee->division->nama }}</td>
+                                        <td>{{ $leave->alasan }}</td>
                                         <td>
                                             <h5>
                                                 <span 
@@ -81,14 +81,14 @@
                                                 </span> 
                                             </h5>
                                         </td>
-                                        <td>{{ ucfirst($leave->half_day) }}</td>
-                                        <td>{{ $leave->start_date->format('d-m-Y')}}</td>
-                                        @if($leave->end_date) 
-                                        <td>{{ $leave->end_date->format('d-m-Y') }}</td>
+                                        <td>{{ ucfirst($leave->setengah_hari) }}</td>
+                                        <td>{{ $leave->tanggal_mulai->format('d-m-Y')}}</td>
+                                        @if($leave->tanggal_selesai)
+                                        <td>{{ $leave->tanggal_selesai->format('d-m-Y') }}</td>
                                         @else
                                         <td>Sehari</td>
                                         @endif
-                                        <td>{{ $leave->description }}</td>
+                                        <td>{{ $leave->deskripsi }}</td>
                                         <td>
                                             <button 
                                             class="btn btn-flat btn-info"

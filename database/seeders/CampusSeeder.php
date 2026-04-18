@@ -17,11 +17,29 @@ class CampusSeeder extends Seeder
     {
         $campus = [
             [
-                'name' => 'Universitas Indonesia',
+                'nama' => 'Universitas Indonesia',
+                'alamat' => 'Depok, Jawa Barat',
+                'kota' => 'Depok',
+                'provinsi' => 'Jawa Barat',
+                'kode_pos' => '16424',
+                'telepon' => '021-7867222',
+                'aktif' => true,
             ],[
-                'name' => 'Institute Technology Bandung',
+                'nama' => 'Institute Technology Bandung',
+                'alamat' => 'Jl. Ganesha No.10, Bandung',
+                'kota' => 'Bandung',
+                'provinsi' => 'Jawa Barat',
+                'kode_pos' => '40132',
+                'telepon' => '022-2500935',
+                'aktif' => true,
             ],[
-                'name' => 'Universitas Negeri Semarang',
+                'nama' => 'Universitas Negeri Semarang',
+                'alamat' => 'Sekaran, Gunungpati, Semarang',
+                'kota' => 'Semarang',
+                'provinsi' => 'Jawa Tengah',
+                'kode_pos' => '50229',
+                'telepon' => '024-8508015',
+                'aktif' => true,
             ]
         ];
         foreach($campus as $key => $value){

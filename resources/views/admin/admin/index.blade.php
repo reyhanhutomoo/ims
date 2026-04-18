@@ -45,9 +45,9 @@
                                 @foreach ($users as $index => $user)
                                 <tr class="text-center">
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $user->name }}</td>
+                                    <td>{{ $user->nama }}</td>
                                     <td>{{ $user->email }}</td>
-                                    <td>{{ $user->roles->first()->name }}</td>
+                                    <td>{{ optional($user->peran->first())->nama }}</td>
                                     <td>
                                         <a href="" class="btn btn-warning" data-toggle="modal" data-target=".editEmployee{{ $user->id }}" title="Edit Employee">Edit</a>
                                         <button 
@@ -170,7 +170,7 @@
                     @method('PUT')
                     <div class="form-group mb-3">
                         <label class="required-label faded-label" for="name">Nama</label>
-                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ $user->name }}" placeholder="Masukkan Nama">
+                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ $user->nama }}" placeholder="Masukkan Nama">
                         @error('name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

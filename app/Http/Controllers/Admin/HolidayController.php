@@ -48,8 +48,8 @@ class HolidayController extends Controller
                 'name' => 'required',
             ]);
             Holiday::create([
-                'name' => $request->name,
-                'start_date' => Carbon::create($request->date)
+                'nama' => $request->name,
+                'tanggal_mulai' => Carbon::create($request->date)
             ]);
             
         } else {
@@ -59,9 +59,9 @@ class HolidayController extends Controller
             ]);
             [$start, $end] = explode(' - ', $request->date_range);
             Holiday::create([
-                'name' => $request->name,
-                'start_date' => $start,
-                'end_date' => $end
+                'nama' => $request->name,
+                'tanggal_mulai' => $start,
+                'tanggal_selesai' => $end
             ]);
         }
         $request->session()->flash('success', 'Hari Libur berhasil ditambah');
@@ -94,9 +94,9 @@ class HolidayController extends Controller
             $this->validate($request, [
                 'name' => 'required',
             ]);
-            $holiday->name = $request->name;
-            $holiday->start_date = Carbon::create($request->date);
-            $holiday->end_date = null;
+            $holiday->nama = $request->name;
+            $holiday->tanggal_mulai = Carbon::create($request->date);
+            $holiday->tanggal_selesai = null;
             
         } else {
             $this->validate($request, [
@@ -104,9 +104,9 @@ class HolidayController extends Controller
                 'date_range' => new DateRange
             ]);
             [$start, $end] = explode(' - ', $request->date_range);
-            $holiday->name = $request->name;
-            $holiday->start_date = $start;
-            $holiday->end_date = $end;
+            $holiday->nama = $request->name;
+            $holiday->tanggal_mulai = $start;
+            $holiday->tanggal_selesai = $end;
         }
         $holiday->save();
         $request->session()->flash('success', 'Update Hari Libur berhasil');

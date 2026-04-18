@@ -21,6 +21,6 @@ class LeavePolicy
     }
 
     public function leave_access(User $user, Leave $leave) {
-        return $user->employee->id === $leave->employee_id;
+        return $user->employee->id === $leave->karyawan_id;
     }
 }

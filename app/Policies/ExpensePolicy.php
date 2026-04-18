@@ -22,6 +22,6 @@ class ExpensePolicy
     }
 
     public function expense_access(User $user, Expense $expense) {
-        return $user->employee->id === $expense->employee_id;
+        return $user->employee->id === $expense->karyawan_id;
     }
 }

@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0 text-dark">List of Holidays</h1>
+                    <h1 class="m-0 text-dark">Daftar Hari Libur</h1>
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-6">
@@ -15,7 +15,7 @@
                             <a href="{{ route('employee.index') }}">Employee Dashboard</a>
                         </li>
                         <li class="breadcrumb-item active">
-                            List of Holidays
+                            Daftar Hari Libur
                         </li>
                     </ol>
                 </div>
@@ -35,7 +35,7 @@
                     <!-- general form elements -->
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">List of Holidays</h3>
+                            <h3 class="card-title">Daftar Hari Libur</h3>
                         </div>
                         <div class="card-body">
                             @if ($holidays->count())
@@ -43,23 +43,23 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Name</th>
-                                        <th>Month</th>
-                                        <th>Start Date</th>
-                                        <th>End Date</th>
+                                        <th>Nama</th>
+                                        <th>Bulan</th>
+                                        <th>Tanggal Mulai</th>
+                                        <th>Tanggal Selesai</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($holidays as $index => $holiday)
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
-                                        <td>{{ $holiday->name }}</td>
-                                        <td>{{ $holiday->start_date->format('F') }}</td>
-                                        <td>{{ $holiday->start_date->format('d')}}</td>
-                                        @if($holiday->end_date) 
-                                        <td>{{ $holiday->end_date->format('d') }}</td>
+                                        <td>{{ $holiday->nama }}</td>
+                                        <td>{{ $holiday->tanggal_mulai->format('F') }}</td>
+                                        <td>{{ $holiday->tanggal_mulai->format('d')}}</td>
+                                        @if($holiday->tanggal_selesai)
+                                        <td>{{ $holiday->tanggal_selesai->format('d') }}</td>
                                         @else
-                                        <td>Single Day</td>
+                                        <td>Satu Hari</td>
                                         @endif
                                     </tr>
                                     @endforeach
@@ -67,7 +67,7 @@
                             </table>
                             @else
                             <div class="alert alert-info text-center" style="width:50%; margin: 0 auto">
-                                <h4>No records available</h4>
+                                <h4>Tidak ada data</h4>
                             </div>
                             @endif
                         </div>

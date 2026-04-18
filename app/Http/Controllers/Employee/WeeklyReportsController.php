@@ -20,11 +20,11 @@ class WeeklyReportsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'tittle' => 'required',
+            'judul' => 'required',
             'file' => 'required|file|mimes:pdf,pptx|max:2048',
-            'value' => 'nullable',
+            'nilai' => 'nullable',
         ],[
-            'tittle.required' => 'Judul wajib diisi!',
+            'judul.required' => 'Judul wajib diisi!',
             'file.required' => 'Wajib upload file!',
             'file.mimes' => 'Format file harus PDF atau PPTX!',
             'file.max' => 'File maksimal 2MB!',
@@ -33,9 +33,9 @@ class WeeklyReportsController extends Controller
         $employee = Auth::user()->employee;
 
         $reportData = [
-            'employee_id' => $employee->id,
-            'tittle' => $request->tittle,
-            'value' => null,
+            'karyawan_id' => $employee->id,
+            'judul' => $request->judul,
+            'nilai' => null,
         ];
     
         if ($request->hasFile('file')) {

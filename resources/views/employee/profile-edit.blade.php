@@ -105,7 +105,7 @@
                                                     selected
                                                 @endif
                                                 >
-                                                    {{ $department->name }}
+                                                    {{ $department->nama }}
                                                 </option>
                                             @endforeach
                                         </select>

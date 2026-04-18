@@ -43,7 +43,7 @@
                                 @foreach ($divisions as $index => $division)
                                 <tr class="text-center">
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $division->name }}</td>
+                                    <td>{{ $division->nama }}</td>
                                     <td>
                                         <a href="" class="btn btn-warning" data-toggle="modal" data-target=".editDivision{{ $division->id }}" title="Edit Divisi">Edit</a>
                                         <button 
@@ -139,7 +139,7 @@
                     @method('PUT')
                     <div class="form-group mb-3">
                         <label class="required-label faded-label" for="name">Nama Divisi</label>
-                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ $division->name }}" placeholder="Masukkan Divisi">
+                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ $division->nama }}" placeholder="Masukkan Divisi">
                         @error('name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

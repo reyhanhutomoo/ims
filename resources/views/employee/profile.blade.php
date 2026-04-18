@@ -41,7 +41,7 @@
                         @include('messages.alerts')
                         <div class="row mb-3">
                             <div class="col text-center mx-auto">
-                                <img src="/storage/{{ $employee->photo }}" class="rounded-circle img-fluid" alt=""
+                                <img src="/storage/{{ $employee->foto }}" class="rounded-circle img-fluid" alt=""
                                 style="box-shadow: 2px 4px rgba(0,0,0,0.1)"
                                 >
                             </div>
@@ -49,7 +49,7 @@
                         <table class="table profile-table table-hover">
                             <tr>
                                 <td>Nama</td>
-                                <td>{{ $employee->name }}</td>
+                                <td>{{ $employee->nama }}</td>
                             </tr>
                             <tr>
                                 <td>Email</td>
@@ -57,24 +57,24 @@
                             </tr>
                             <tr>
                                 <td>Umur</td>
-                                <td>{{ $employee->age }}</td>
+                                <td>{{ $employee->usia }}</td>
                             </tr>
                             <tr>
                                 <td>Asal Kampus</td>
-                                <td>{{ $employee->campus->name }}</td>
+                                <td>{{ $employee->campus->nama }}</td>
                             </tr>
                             <tr>
                                 <td>Divisi</td>
-                                <td>{{ $employee->division->name }}</td>
+                                <td>{{ $employee->division->nama }}</td>
                             </tr>
                             
                             <tr>
                                 <td>Tanggal Mulai Magang</td>
-                                <td>{{ \Carbon\Carbon::parse($employee->start_date)->format('d F Y') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($employee->tanggal_mulai)->format('d F Y') }}</td>
                             </tr>
                             <tr>
                                 <td>Tanggal Selesai Magang</td>
-                                <td>{{ \Carbon\Carbon::parse($employee->end_date)->format('d F Y') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($employee->tanggal_selesai)->format('d F Y') }}</td>
                             </tr>
                         </table>
                     </div>

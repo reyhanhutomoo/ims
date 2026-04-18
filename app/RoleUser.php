@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class RoleUser extends Model
 {
     use HasFactory;
-    protected $table = 'role_user';
+    protected $table = 'peran_pengguna';
     protected $primaryKey = 'id';
     public $incrementing = true;
     public $timestamps = true;
 
     protected $fillable = [
-        'role_id',
-        'user_id',
+        'peran_id',
+        'pengguna_id',
     ];
 }

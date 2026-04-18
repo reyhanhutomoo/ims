@@ -88,7 +88,7 @@
                                 @foreach ($employees as $index => $employee)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $employee->name }}</td>
+                                    <td>{{ $employee->nama }}</td>
                                     @if($employee->attendanceToday)
                                     <td>
                                         <h6 class="text-center">
@@ -108,23 +108,34 @@
                                         </h6>
                                     </td>
                                         <td>
-                                            Terekam sejak {{ $employee->attendanceToday->created_at->format('H:i:s') }} dari {{ $employee->attendanceToday->entry_location}} dengan alamat IP {{ $employee->attendanceToday->entry_ip}} <span class="badge {{ $employee->attendanceToday->entry_status === 'Valid' ? 'badge-success' : 'badge-danger' }}">IP/ Lokasi Kantor 
-                                                {{ $employee->attendanceToday->entry_status }}
+                                            Terekam sejak {{ $employee->attendanceToday->created_at->format('H:i:s') }} dari {{ $employee->attendanceToday->lokasi_masuk}} dengan alamat IP {{ $employee->attendanceToday->ip_masuk}} <span class="badge {{ $employee->attendanceToday->status_masuk === 'Valid' ? 'badge-success' : 'badge-danger' }}">IP/ Lokasi Kantor
+                                                {{ $employee->attendanceToday->status_masuk }}
                                             </span>
                                         </td>
-                                        <?php if($employee->attendanceToday->time>=7 && $employee->attendanceToday->time<=9) { ?>
-                                            <td><h6 class="text-center"><span class="badge badge-pill badge-success">Hadir Tepat Waktu</span></h6></td>
-                                        <?php } elseif ($employee->attendanceToday->time>9 && $employee->attendanceToday->time<=15) {
-                                            ?><td><h6 class="text-center"><span class="badge badge-pill badge-warning">Hadir Terlambat</span></h6></td><?php
-                                        } else {
-                                            ?><td><h6 class="text-center"><span class="badge badge-pill badge-danger">Absensi Di Luar Jam Kerja</span></h6></td><?php 
-                                        } ?>
+                                        @php
+                                            $hour = optional($employee->attendanceToday)->waktu_masuk
+                                                ? \Carbon\Carbon::parse($employee->attendanceToday->waktu_masuk)->hour
+                                                : null;
+                                        @endphp
                                         <td>
-                                            Terekam sejak {{ $employee->attendanceToday->updated_at->format('H:i:s') }} dari {{ $employee->attendanceToday->exit_location}} dengan alamat IP {{ $employee->attendanceToday->exit_ip}} <span class="badge {{ $employee->attendanceToday->exit_status === 'Valid' ? 'badge-success' : 'badge-danger' }}">IP/ Lokasi Kantor 
-                                                {{ $employee->attendanceToday->exit_status }}
+                                            <h6 class="text-center">
+                                                @if (is_null($hour))
+                                                    <span class="badge badge-pill badge-secondary">Waktu Masuk Tidak Tersedia</span>
+                                                @elseif ($hour >= 7 && $hour <= 9)
+                                                    <span class="badge badge-pill badge-success">Hadir Tepat Waktu</span>
+                                                @elseif ($hour > 9 && $hour <= 15)
+                                                    <span class="badge badge-pill badge-warning">Hadir Terlambat</span>
+                                                @else
+                                                    <span class="badge badge-pill badge-danger">Absensi Di Luar Jam Kerja</span>
+                                                @endif
+                                            </h6>
+                                        </td>
+                                        <td>
+                                            Terekam sejak {{ $employee->attendanceToday->updated_at->format('H:i:s') }} dari {{ $employee->attendanceToday->lokasi_keluar}} dengan alamat IP {{ $employee->attendanceToday->ip_keluar}} <span class="badge {{ $employee->attendanceToday->status_keluar === 'Valid' ? 'badge-success' : 'badge-danger' }}">IP/ Lokasi Kantor
+                                                {{ $employee->attendanceToday->status_keluar }}
                                             </span>
                                         </td>
-                                        <td>{{ $employee->attendanceToday->daily_report }}</td>
+                                        <td>{{ $employee->attendanceToday->laporan_harian }}</td>
                                     @else
                                         <td><h6 class="text-center"><span class="badge badge-pill badge-danger">Belum Ada Riwayat</span></h6></td>
                                         <td><h6 class="text-center"><span class="badge badge-pill badge-danger">Belum Ada Riwayat</span></h6></td>
@@ -132,7 +143,7 @@
                                         <td><h6 class="text-center"><span class="badge badge-pill badge-danger">Belum Ada Riwayat</span></h6></td>
                                         <td>-</td>
                                     @endif
-                                    <td class="text-center">{{ $employee->division_name }}</td>
+                                    <td class="text-center">{{ $employee->division_nama ?? '-' }}</td>
 
                                     {{-- <td>
                                     <?php 
@@ -253,8 +264,8 @@
                     <div class="form-group mb-3">
                         <label class="required-label faded-label" for="entry_status">Kevalidasian IP/Lokasi Masuk</label>
                         <select name="entry_status" class="form-control @error('entry_status') is-invalid @enderror">
-                            <option value="Valid" {{ old('entry_status', $employee->attendanceToday->entry_status) == 'Valid' ? 'selected' : '' }}>Valid</option>
-                            <option value="Invalid" {{ old('entry_status', $employee->attendanceToday->entry_status) == 'Invalid' ? 'selected' : '' }}>Invalid</option>
+                            <option value="Valid" {{ old('entry_status', $employee->attendanceToday->status_masuk) == 'Valid' ? 'selected' : '' }}>Valid</option>
+                            <option value="Invalid" {{ old('entry_status', $employee->attendanceToday->status_masuk) == 'Invalid' ? 'selected' : '' }}>Invalid</option>
                         </select>
                         @error('entry_status')
                             <span class="invalid-feedback" role="alert">
@@ -266,8 +277,8 @@
                         <label class="required-label faded-label" for="exit_status">Kevalidasian IP/Lokasi Keluar</label>
                         <select name="exit_status" class="form-control @error('exit_status') is-invalid @enderror">
                             <option selected disabled value="" style="font-style: italic;">Pilih Salah Satu</option>
-                            <option value="Valid" {{ old('exit_status', $employee->attendanceToday->exit_status) == 'Valid' ? 'selected' : '' }}>Valid</option>
-                            <option value="Invalid" {{ old('exit_status', $employee->attendanceToday->exit_status) == 'Invalid' ? 'selected' : '' }}>Invalid</option>
+                            <option value="Valid" {{ old('exit_status', $employee->attendanceToday->status_keluar) == 'Valid' ? 'selected' : '' }}>Valid</option>
+                            <option value="Invalid" {{ old('exit_status', $employee->attendanceToday->status_keluar) == 'Invalid' ? 'selected' : '' }}>Invalid</option>
                         </select>
                         @error('exit_status')
                             <span class="invalid-feedback" role="alert">

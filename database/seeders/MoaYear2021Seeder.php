@@ -1,0 +1,65 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
+
+class MoaYear2021Seeder extends Seeder
+{
+    public function run()
+    {
+        // Ambil salah satu pengguna jika ada, fallback ke 1 (UsersSeeder biasanya membuat admin id=1)
+        $userId = DB::table('pengguna')->value('id') ?? 1;
+
+        // Nonaktifkan constraint FK sementara (hindari gagal insert jika data pengguna kosong di lingkungan dev)
+        Schema::disableForeignKeyConstraints();
+
+        $rows = [];
+        // Generate data tiap bulan untuk tahun 2021
+        for ($m = 1; $m <= 12; $m++) {
+            // Jumlah dummy per bulan (bisa disesuaikan)
+            $moaCount = 3; // 3 MOA per bulan
+            $iaCount  = 2; // 2 IA per bulan
+
+            for ($i = 1; $i <= $moaCount; $i++) {
+                $created = Carbon::create(2021, $m, rand(1, 28), rand(8, 18), rand(0, 59));
+                $rows[] = [
+                    'pengguna_id'     => $userId,
+                    'nomor_pelacakan' => 'MOA-2021-' . str_pad($m, 2, '0', STR_PAD_LEFT) . '-' . $i . '-' . Str::uuid(),
+                    'judul'           => 'Dummy MOA ' . Carbon::create(2021, $m, 1)->translatedFormat('F') . ' 2021',
+                    'jenis_dokumen'   => 'MOA',
+                    'path_berkas'     => 'moa/dummy_2021_moa_' . $m . '_' . $i . '.pdf',
+                    'path_berkas_ttd' => null,
+                    'status'          => 'menunggu', // enum DB dalam bahasa Indonesia
+                    'created_at'      => $created,
+                    'updated_at'      => $created,
+                ];
+            }
+
+            for ($j = 1; $j <= $iaCount; $j++) {
+                $created = Carbon::create(2021, $m, rand(1, 28), rand(8, 18), rand(0, 59));
+                $rows[] = [
+                    'pengguna_id'     => $userId,
+                    'nomor_pelacakan' => 'IA-2021-' . str_pad($m, 2, '0', STR_PAD_LEFT) . '-' . $j . '-' . Str::uuid(),
+                    'judul'           => 'Dummy IA ' . Carbon::create(2021, $m, 1)->translatedFormat('F') . ' 2021',
+                    'jenis_dokumen'   => 'IA',
+                    'path_berkas'     => 'moa/dummy_2021_ia_' . $m . '_' . $j . '.pdf',
+                    'path_berkas_ttd' => null,
+                    'status'          => 'menunggu',
+                    'created_at'      => $created,
+                    'updated_at'      => $created,
+                ];
+            }
+        }
+
+        if (!empty($rows)) {
+            DB::table('pengajuan_moa')->insert($rows);
+        }
+
+        Schema::enableForeignKeyConstraints();
+    }
+}

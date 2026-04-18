@@ -24,7 +24,7 @@ class DivisionController extends Controller
             'name.required' => 'Nama Divisi wajib diisi!',
         ]);
         Division::create([
-            'name' => $request->name,
+            'nama' => $request->name,
         ]);
         
         Alert::success('Success', 'Data berhasil ditambahkan!');
@@ -39,7 +39,7 @@ class DivisionController extends Controller
         ]);
 
         $divisions = Division::find($id);
-        $divisions->name = $request->name;
+        $divisions->nama = $request->name;
         $divisions->save();
 
         Alert::success('Success', 'Data berhasil diubah!');
@@ -48,13 +48,13 @@ class DivisionController extends Controller
 
     public function destroy($id) {
         $division = Division::findOrFail($id);
-        $employeesUsingDivision = Employee::where('division_id', $id)->exists();
+        $employeesUsingDivision = Employee::where('divisi_id', $id)->exists();
 
         if ($employeesUsingDivision) {
             Alert::error('Gagal', 'Divisi ini sedang digunakan oleh karyawan.');
             return redirect()->back();
         }
-        DB::table('division')->where('id', '=', $id)->delete();
+        DB::table('divisi')->where('id', '=', $id)->delete();
         $division->delete();
 
         Alert::success('Success', 'Data berhasil dihapus!');

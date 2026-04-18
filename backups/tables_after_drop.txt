@@ -1,0 +1,17 @@
+cuti
+divisi
+failed_jobs
+hari_libur
+ip_lokasi
+kampus
+karyawan
+kehadiran
+laporan_mingguan
+migrations
+password_resets
+pengajuan_moa
+pengguna
+peran
+peran_pengguna
+personal_access_tokens
+statusatten

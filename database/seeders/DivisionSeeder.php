@@ -17,11 +17,17 @@ class DivisionSeeder extends Seeder
     {
         $division = [
             [
-                'name' => 'Technology',
+                'nama' => 'Technology',
+                'deskripsi' => 'Divisi teknologi dan pengembangan sistem',
+                'aktif' => true,
             ],[
-                'name' => 'Media',
+                'nama' => 'Media',
+                'deskripsi' => 'Divisi media dan komunikasi',
+                'aktif' => true,
             ],[
-                'name' => 'Production',
+                'nama' => 'Production',
+                'deskripsi' => 'Divisi produksi dan operasional',
+                'aktif' => true,
             ]
         ];
         foreach($division as $key => $value){

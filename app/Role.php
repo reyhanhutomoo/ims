@@ -8,13 +8,23 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     use HasFactory;
-    protected $table = 'roles';
-    public $incrementing = true;
+
+    // Tabel Bahasa Indonesia
+    protected $table = 'peran';
+
     public $timestamps = true;
-    protected $fillabe = [
-        'name',
+
+    // Kolom Bahasa Indonesia
+    protected $fillable = [
+        'nama',
+        'deskripsi',
     ];
-    public function users() {
-        return $this->belongsToMany('App\User');
+
+    /**
+     * Relasi ke Pengguna melalui pivot 'peran_pengguna'
+     */
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'peran_pengguna', 'peran_id', 'pengguna_id');
     }
 }

@@ -1,0 +1,148 @@
+﻿Warning: TTY mode is not supported on Windows platform.
+PHPUnit 9.6.22 by Sebastian Bergmann and contributors.
+
+FFFEFFEFEE                                                        10 / 10 (100%)
+
+Time: 01:24.251, Memory: 40.00 MB
+
+There were 4 errors:
+
+1) Tests\Browser\ExampleTest::testMOAFileUpload
+Facebook\WebDriver\Exception\NoSuchElementException: no such element: Unable to locate element: {"method":"css selector","selector":"body title"}
+  (Session info: chrome=147.0.7727.56)
+
+C:\laragon\www\ims\vendor\php-webdriver\webdriver\lib\Exception\WebDriverException.php:120
+C:\laragon\www\ims\vendor\php-webdriver\webdriver\lib\Remote\HttpCommandExecutor.php:361
+C:\laragon\www\ims\vendor\php-webdriver\webdriver\lib\Remote\RemoteWebDriver.php:601
+C:\laragon\www\ims\vendor\php-webdriver\webdriver\lib\Remote\RemoteWebDriver.php:217
+C:\laragon\www\ims\vendor\laravel\dusk\src\ElementResolver.php:372
+C:\laragon\www\ims\vendor\laravel\dusk\src\ElementResolver.php:351
+C:\laragon\www\ims\vendor\laravel\dusk\src\ElementResolver.php:89
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\InteractsWithElements.php:146
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:84
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\ProvidesBrowser.php:69
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:71
+
+2) Tests\Browser\ExampleTest::testAdminMOAReviewPage
+Illuminate\Database\QueryException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'name' in 'field list' (SQL: insert into `peran` (`nama`, `name`, `updated_at`, `created_at`) values (supervisor, admin, 2026-04-11 21:39:27, 2026-04-11 21:39:27))
+
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Connection.php:760
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Connection.php:720
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Connection.php:534
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Connection.php:498
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Query\Processors\Processor.php:32
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3322
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:1869
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Model.php:1330
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Model.php:1295
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Model.php:1138
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Factories\Factory.php:330
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Collections\Traits\EnumeratesValues.php:235
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Factories\Factory.php:325
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Factories\Factory.php:279
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Factories\Factory.php:273
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:140
+
+Caused by
+PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'name' in 'field list'
+
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Connection.php:539
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Connection.php:753
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Connection.php:720
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Connection.php:534
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Connection.php:498
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Query\Processors\Processor.php:32
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3322
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:1869
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Model.php:1330
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Model.php:1295
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Model.php:1138
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Factories\Factory.php:330
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Collections\Traits\EnumeratesValues.php:235
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Factories\Factory.php:325
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Factories\Factory.php:279
+C:\laragon\www\ims\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Factories\Factory.php:273
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:140
+
+3) Tests\Browser\ExampleTest::testPublicMOASearch
+InvalidArgumentException: Unable to locate button [Search].
+
+C:\laragon\www\ims\vendor\laravel\dusk\src\ElementResolver.php:248
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\InteractsWithElements.php:332
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:184
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\ProvidesBrowser.php:69
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:181
+
+4) Tests\Browser\ExampleTest::testMOAValidationErrors
+InvalidArgumentException: Unable to locate button [Submit].
+
+C:\laragon\www\ims\vendor\laravel\dusk\src\ElementResolver.php:248
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\InteractsWithElements.php:332
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:195
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\ProvidesBrowser.php:69
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:192
+
+--
+
+There were 6 failures:
+
+1) Tests\Browser\ExampleTest::testBasicExample
+Did not see expected text [Masuk] within element [body].
+Failed asserting that false is true.
+
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\MakesAssertions.php:179
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\MakesAssertions.php:152
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:38
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\ProvidesBrowser.php:69
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:22
+
+2) Tests\Browser\ExampleTest::testMOAEmployeeDashboardAccess
+Actual path [/login] does not equal expected path [/employee/dashboard].
+Failed asserting that '/login' matches PCRE pattern "/^\/employee\/dashboard$/u".
+
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\MakesUrlAssertions.php:183
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:50
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\ProvidesBrowser.php:69
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:44
+
+3) Tests\Browser\ExampleTest::testMOASubmissionForm
+Did not see expected text [Form Pengajuan MOA/IA] within element [body].
+Failed asserting that false is true.
+
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\MakesAssertions.php:179
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\MakesAssertions.php:152
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:61
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\ProvidesBrowser.php:69
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:58
+
+4) Tests\Browser\ExampleTest::testMOATrackingNumberDisplay
+Did not see expected text [Detail MOA/IA] within element [body].
+Failed asserting that false is true.
+
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\MakesAssertions.php:179
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\MakesAssertions.php:152
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:106
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\ProvidesBrowser.php:69
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:103
+
+5) Tests\Browser\ExampleTest::testMOAStatusBadges
+Element [body .badge.badge-warning] is not present.
+Failed asserting that false is true.
+
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\MakesAssertions.php:849
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:132
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\ProvidesBrowser.php:69
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:129
+
+6) Tests\Browser\ExampleTest::testPublicMOAList
+Did not see expected text [Dokumen MOA/IA Tersedia] within element [body].
+Failed asserting that false is true.
+
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\MakesAssertions.php:179
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\MakesAssertions.php:152
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:162
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\ProvidesBrowser.php:69
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:160
+
+ERRORS!
+Tests: 10, Assertions: 8, Errors: 4, Failures: 6.

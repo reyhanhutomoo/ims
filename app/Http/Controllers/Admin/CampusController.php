@@ -24,7 +24,7 @@ class CampusController extends Controller
             'name.required' => 'Nama Divisi wajib diisi!',
         ]);
         Campus::create([
-            'name' => $request->name,
+            'nama' => $request->name,
         ]);
         
         Alert::success('Success', 'Data berhasil ditambahkan!');
@@ -39,7 +39,7 @@ class CampusController extends Controller
         ]);
 
         $campuses = Campus::find($id);
-        $campuses->name = $request->name;
+        $campuses->nama = $request->name;
         $campuses->save();
 
         Alert::success('Success', 'Data berhasil diubah!');
@@ -48,13 +48,13 @@ class CampusController extends Controller
 
     public function destroy($id) {
         $campus = Campus::findOrFail($id);
-        $employeesUsingCampus = Employee::where('campus_id', $id)->exists();
+        $employeesUsingCampus = Employee::where('kampus_id', $id)->exists();
         
         if ($employeesUsingCampus) {
             Alert::error('Gagal', 'Kampus ini sedang digunakan oleh karyawan.');
             return redirect()->back();
         }
-        DB::table('campus')->where('id', '=', $id)->delete();
+        DB::table('kampus')->where('id', '=', $id)->delete();
         $campus->delete();
 
         Alert::success('Success', 'Data berhasil dihapus!');

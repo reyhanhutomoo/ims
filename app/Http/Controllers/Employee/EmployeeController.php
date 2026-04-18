@@ -45,9 +45,9 @@ class EmployeeController extends Controller
 
         $employee = Employee::findOrFail($id);
 
-        if ($employee->photo) {
+        if ($employee->foto) {
             // Hapus foto lama
-            Storage::delete('public/photos/' . $employee->photo);
+            Storage::delete('public/photos/' . $employee->foto);
         }
     
         if ($request->hasFile('photo')) {
@@ -56,7 +56,7 @@ class EmployeeController extends Controller
             Storage::putFileAs('public/photos', $file, $fileName);
     
             // Simpan nama file foto baru ke dalam database
-            $employee->photo = $fileName;
+            $employee->foto = $fileName;
             $employee->save();
         }
         Alert::success('Success', 'Photo berhasil diubah.');
@@ -80,13 +80,13 @@ class EmployeeController extends Controller
         ]);
     
         // Check if old password matches
-        if (!Hash::check($request->old_password, $user->password)) {
+        if (!Hash::check($request->old_password, $user->kata_sandi)) {
             Alert::error('Error', 'Password Salah.');
             return back();
         }
     
         // Update password
-        $user->password = Hash::make($request->password);
+        $user->kata_sandi = Hash::make($request->password);
         $user->save();
     
         Alert::success('Success', 'Password berhasil diubah.');

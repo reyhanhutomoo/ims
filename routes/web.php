@@ -15,8 +15,12 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', function () {
-    return redirect()->route('login');
-});
+    return view('welcome');
+})->name('welcome');
+
+// Public routes for MoA/IA viewer (no authentication required)
+Route::get('/public/moa', 'PublicMoaController@index')->name('public.moa.index');
+Route::get('/public/moa/{id}', 'PublicMoaController@show')->name('public.moa.show');
 
 Auth::routes(['register' => 'Register2Controller@register']);
 Route::get('/employees/list-employees', 'Register2Controller@index')->name('register.index');
@@ -34,10 +38,7 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware(['auth','
     Route::put('/admin/{id}', 'AdminManageController@update')->name('admin.update');
     Route::delete('/admin/{id}', 'AdminManageController@destroy')->name('admin.delete');
     // Route for Ip and Location //
-    Route::get('/iploc/list-iploc', 'IpLocController@index')->name('iploc.index');
-    Route::post('/iploc/add-iploc', 'IpLocController@store')->name('iploc.store');
-    Route::put('/iploc/{id}', 'IpLocController@update')->name('iploc.update');
-    Route::delete('/iploc/{id}', 'IpLocController@destroy')->name('iploc.delete');
+    // Ip Location feature removed
     // Route for Division //
     Route::get('/division/list-division', 'DivisionController@index')->name('division.index');
     Route::post('/division/add-division', 'DivisionController@store')->name('division.store');
@@ -71,6 +72,8 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware(['auth','
     Route::delete('/employees/weeklyreports/{id}', 'WeeklyReportsController@destroy')->name('employees.weeklyreports.delete');
     Route::get('/employees/weeklyreports/download/{filenName}', 'WeeklyReportsController@download')->name('employees.weeklyreports.download');
     Route::get('/employees/weeklyreports/filter', 'WeeklyReportsController@downloadWeeklyReports')->name('employees.weeklyreports.filter');
+    Route::get('/moa/dashboard', 'MoaController@dashboard')->name('moa.dashboard');
+    Route::resource('moa', 'MoaController')->only('index', 'show', 'edit', 'update', 'destroy');
 });
 
 Route::namespace('Employee')->prefix('employee')->name('employee.')->middleware(['auth','can:employee-access'])->group(function () {
@@ -105,4 +108,5 @@ Route::namespace('Employee')->prefix('employee')->name('employee.')->middleware(
     Route::get('/self/holidays', 'SelfController@holidays')->name('self.holidays');
     Route::get('/self/salary_slip', 'SelfController@salary_slip')->name('self.salary_slip');
     Route::get('/self/salary_slip_print', 'SelfController@salary_slip_print')->name('self.salary_slip_print');
+    Route::resource('moa', 'MoaController')->only('index', 'create', 'store', 'show');
 });

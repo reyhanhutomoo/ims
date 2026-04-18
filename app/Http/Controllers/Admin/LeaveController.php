@@ -49,21 +49,21 @@ class LeaveController extends Controller
             // Jika status baru adalah 'diterima' dan sebelumnya bukan 'diterima'
     
             // Ambil data yang diperlukan dari Leave
-            $employee_id = $leave->employee_id;
-            $registered = $leave->reason;
+            $employee_id = $leave->karyawan_id;
+            $registered = $leave->alasan;
     
             // Cek apakah terdapat rentang tanggal (start_date dan end_date diisi)
-            if ($leave->start_date && $leave->end_date) {
-                $startDate = Carbon::parse($leave->start_date);
-                $endDate = Carbon::parse($leave->end_date);
+            if ($leave->tanggal_mulai && $leave->tanggal_selesai) {
+                $startDate = Carbon::parse($leave->tanggal_mulai);
+                $endDate = Carbon::parse($leave->tanggal_selesai);
     
                 // Loop untuk setiap tanggal dalam rentang
                 while ($startDate->lte($endDate)) {
                     // Buat entri baru di tabel Attendance
                     $attendance = new Attendance();
-                    $attendance->employee_id = $employee_id;
-                    $attendance->registered = $registered;
-                    $attendance->created_at = $startDate;
+                    $attendance->karyawan_id = $employee_id;
+                    $attendance->laporan_harian = $registered;
+                    $attendance->tanggal = $startDate->toDateString();
                     $attendance->save();
     
                     // Tambahkan 1 hari ke tanggal start untuk iterasi berikutnya
@@ -72,9 +72,9 @@ class LeaveController extends Controller
             } else {
                 // Jika tidak terdapat rentang tanggal, buat entri tunggal di Attendance
                 $attendance = new Attendance();
-                $attendance->employee_id = $employee_id;
-                $attendance->registered = $registered;
-                $attendance->created_at = $leave->start_date; // Gunakan start_date dari Leave
+                $attendance->karyawan_id = $employee_id;
+                $attendance->laporan_harian = $registered;
+                $attendance->tanggal = Carbon::parse($leave->tanggal_mulai)->toDateString(); // Gunakan tanggal_mulai dari Leave
                 $attendance->save();
             }
         }

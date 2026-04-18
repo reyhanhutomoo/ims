@@ -129,15 +129,15 @@
                                             } else {
                                                 ?><td><h6 class="text-center"><span class="badge badge-pill badge-danger">Absensi Di Luar Jam Kerja</span></h6></td><?php 
                                             } ?>
-                                            <td>{{ $attendance->daily_report }}</td>
+                                            <td>{{ $attendance->laporan_harian }}</td>
                                             <td>
-                                                Terekam sejak {{ $attendance->created_at->format('H:i:s') }} dari {{ $attendance->entry_location}} dengan alamat IP {{ $attendance->entry_ip}} <span class="badge {{ $attendance->entry_status === 'Valid' ? 'badge-success' : 'badge-danger' }}">IP/ Lokasi Kantor 
-                                                    {{ $attendance->entry_status }}
+                                                Terekam sejak {{ $attendance->created_at->format('H:i:s') }} dari {{ $attendance->lokasi_masuk}} dengan alamat IP {{ $attendance->ip_masuk}} <span class="badge {{ $attendance->status_masuk === 'Valid' ? 'badge-success' : 'badge-danger' }}">IP/ Lokasi Kantor
+                                                    {{ $attendance->status_masuk }}
                                                 </span>
                                             </td>
                                             <td>
-                                                Terekam sejak {{ $attendance->updated_at->format('H:i:s') }} dari {{ $attendance->exit_location}} dengan alamat IP {{ $attendance->exit_ip}} <span class="badge {{ $attendance->exit_status === 'Valid' ? 'badge-success' : 'badge-danger' }}">IP/ Lokasi Kantor 
-                                                    {{ $attendance->exit_status }}
+                                                Terekam sejak {{ $attendance->updated_at->format('H:i:s') }} dari {{ $attendance->lokasi_keluar}} dengan alamat IP {{ $attendance->ip_keluar}} <span class="badge {{ $attendance->status_keluar === 'Valid' ? 'badge-success' : 'badge-danger' }}">IP/ Lokasi Kantor
+                                                    {{ $attendance->status_keluar }}
                                                 </span>
                                             </td>
                                             @elseif ($attendance->registered == 'Membutuhkan Validasi')
@@ -150,15 +150,15 @@
                                             } else {
                                                 ?><td><h6 class="text-center"><span class="badge badge-pill badge-danger">Absensi Di Luar Jam Kerja</span></h6></td><?php 
                                             } ?>
-                                            <td>{{ $attendance->daily_report }}</td>
+                                            <td>{{ $attendance->laporan_harian }}</td>
                                             <td>
-                                                Terekam sejak {{ $attendance->created_at->format('H:i:s') }} dari {{ $attendance->entry_location}} dengan alamat IP {{ $attendance->entry_ip}} <span class="badge {{ $attendance->entry_status === 'Valid' ? 'badge-success' : 'badge-danger' }}">IP/ Lokasi Kantor 
-                                                    {{ $attendance->entry_status }}
+                                                Terekam sejak {{ $attendance->created_at->format('H:i:s') }} dari {{ $attendance->lokasi_masuk}} dengan alamat IP {{ $attendance->ip_masuk}} <span class="badge {{ $attendance->status_masuk === 'Valid' ? 'badge-success' : 'badge-danger' }}">IP/ Lokasi Kantor
+                                                    {{ $attendance->status_masuk }}
                                                 </span>
                                             </td>
                                             <td>
-                                                Terekam sejak {{ $attendance->updated_at->format('H:i:s') }} dari {{ $attendance->exit_location}} dengan alamat IP {{ $attendance->exit_ip}} <span class="badge {{ $attendance->exit_status === 'Valid' ? 'badge-success' : 'badge-danger' }}">IP/ Lokasi Kantor 
-                                                    {{ $attendance->exit_status }}
+                                                Terekam sejak {{ $attendance->updated_at->format('H:i:s') }} dari {{ $attendance->lokasi_keluar}} dengan alamat IP {{ $attendance->ip_keluar}} <span class="badge {{ $attendance->status_keluar === 'Valid' ? 'badge-success' : 'badge-danger' }}">IP/ Lokasi Kantor
+                                                    {{ $attendance->status_keluar }}
                                                 </span>
                                             </td>
                                             @elseif ($attendance->registered === null)
@@ -173,8 +173,8 @@
                                             } ?>
                                             <td>Belum Ada Riwayat</td>
                                             <td>
-                                                Terekam sejak {{ $attendance->created_at->format('H:i:s') }} dari {{ $attendance->entry_location}} dengan alamat IP {{ $attendance->entry_ip}} <span class="badge {{ $attendance->entry_status === 'Valid' ? 'badge-success' : 'badge-danger' }}">IP/ Lokasi Kantor 
-                                                    {{ $attendance->entry_status }}
+                                                Terekam sejak {{ $attendance->created_at->format('H:i:s') }} dari {{ $attendance->lokasi_masuk}} dengan alamat IP {{ $attendance->ip_masuk}} <span class="badge {{ $attendance->status_masuk === 'Valid' ? 'badge-success' : 'badge-danger' }}">IP/ Lokasi Kantor
+                                                    {{ $attendance->status_masuk }}
                                                 </span>
                                             </td>
                                             <td>

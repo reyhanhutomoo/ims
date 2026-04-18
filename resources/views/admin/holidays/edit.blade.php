@@ -45,8 +45,8 @@
                             @method('PUT')
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label for="">Name</label>
-                                    <input type="text" name="name" value="{{ $holiday->name }}" class="form-control">
+                                    <label for="">Nama</label>
+                                    <input type="text" name="name" value="{{ $holiday->nama }}" class="form-control">
                                     @error('name')
                                     <div class="text-danger">
                                         {{ $message }}
@@ -56,7 +56,7 @@
                                 <div class="form-group">
                                     <label for="">Lebih Dari Sehari ?</label>
                                     <select name="multiple-days" class="form-control" onchange="showInput()">
-                                        @if ($holiday->end_date)
+                                        @if ($holiday->tanggal_selesai)
                                         <option value="no">Tidak</option>
                                         <option value="yes" selected>Ya</option>
                                         @else
@@ -97,7 +97,7 @@
 
 <script>
     $(document).ready(function() {
-        if('{{ $holiday->end_date }}') {
+        if('{{ $holiday->tanggal_selesai }}') {
             $('#date1').daterangepicker({
                 "showDropdowns": true,
                 "singleDatePicker": true,
@@ -106,8 +106,8 @@
                 }
             });
             $('#single-date').addClass('hide-input');
-            start = moment('{{ $holiday->start_date }}', 'YYYY-MM-DD');
-            end = moment('{{ $holiday->end_date }}', 'YYYY-MM-DD');
+            start = moment('{{ $holiday->tanggal_mulai }}', 'YYYY-MM-DD');
+            end = moment('{{ $holiday->tanggal_selesai }}', 'YYYY-MM-DD');
             $('#date2').daterangepicker({
                 "startDate": start,
                 "endDate": end,
@@ -117,7 +117,7 @@
                 }
             });
         } else {
-            start = moment('{{ $holiday->start_date }}', 'YYYY-MM-DD');
+            start = moment('{{ $holiday->tanggal_mulai }}', 'YYYY-MM-DD');
             $('#date1').daterangepicker({
                 "startDate": start,
                 "showDropdowns": true,

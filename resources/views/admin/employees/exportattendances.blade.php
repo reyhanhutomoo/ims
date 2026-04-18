@@ -33,7 +33,7 @@
         <thead>
             <tr class="text-center">
                 <th>#</th>
-                <th>Name</th>
+                <th>Nama</th>
                 <th>Divisi</th>
                 <th>IP Masuk</th>
                 <th>Waktu Masuk</th>
@@ -52,16 +52,16 @@
             @foreach($attendances as $index => $attendance)
             <tr>
                 <td>{{ $index + 1 }}</td>
-                <td>{{ $attendance->employee->name }}</td>
-                <td>{{ $attendance->employee->division->name }}</td>
-                <td>{{ $attendance->entry_ip }}</td>
-                <td>{{ $attendance->employee->created_at }}</td>
-                <td>{{ $attendance->entry_location }}</td>
-                <td>{{ $attendance->entry_status }}</td>
-                <td>{{ $attendance->exit_ip }}</td>
-                <td>{{ $attendance->employee->updated_at }}</td>
-                <td>{{ $attendance->exit_location }}</td>
-                <td>{{ $attendance->exit_status }}</td>
+                <td>{{ $attendance->employee->nama }}</td>
+                <td>{{ $attendance->employee->division->nama }}</td>
+                <td>{{ $attendance->ip_masuk }}</td>
+                <td>{{ $attendance->waktu_masuk }}</td>
+                <td>{{ $attendance->lokasi_masuk }}</td>
+                <td>{{ $attendance->status_masuk }}</td>
+                <td>{{ $attendance->ip_keluar }}</td>
+                <td>{{ $attendance->waktu_keluar }}</td>
+                <td>{{ $attendance->lokasi_keluar }}</td>
+                <td>{{ $attendance->status_keluar }}</td>
                 <td><span style="font-family: Arial, Helvetica, sans-serif">{{ $attendance->registered }}</span></td>
                     <?php if($attendance->time>=7 && $attendance->time<=9) { ?>
                         <td><span style="font-family: Arial, Helvetica, sans-serif">Hadir Tepat Waktu</span></td>
@@ -70,7 +70,7 @@
                     } else {
                         ?><td><span style="font-family: Arial, Helvetica, sans-serif">Absensi Tidak Valid</span></td><?php 
                     } ?>
-                    <td>{{ $attendance->daily_report }}</td>
+                    <td>{{ $attendance->laporan_harian }}</td>
             </tr>
             @endforeach
         </tbody>

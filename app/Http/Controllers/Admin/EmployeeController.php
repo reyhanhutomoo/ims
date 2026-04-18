@@ -14,6 +14,7 @@ use App\Rules\DateRange;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 use Intervention\Image\ImageManagerStatic as Image;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Validation\Rule;
@@ -41,7 +42,7 @@ class EmployeeController extends Controller
             'age' => 'required',
             'campus_id' => 'required',
             'division_id' => 'required',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email|unique:pengguna,email',
             'password' => 'required|confirmed|min:6',
             'start_date' => 'required',
             'end_date' => 'required',
@@ -57,21 +58,20 @@ class EmployeeController extends Controller
             'password.required' => 'Password wajib diisi!',
         ]);
         $user = User::create([
-            'name' => $request->name,
+            'nama' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'kata_sandi' => Hash::make($request->password)
         ]);
-        $employeeRole = Role::where('name', 'employee')->first();
-        $user->roles()->attach($employeeRole);
+        $employeeRole = Role::where('nama', 'employee')->first();
+        $user->peran()->attach($employeeRole);
         $employeeDetails = [
-            'user_id' => $user->id, 
-            'name' => $request->name, 
-            'age' => $request->age,
-            'campus_id' => $request->campus_id, 
-            'division_id' => $request->division_id, 
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            // 'photo'  => 'user.png'
+            'pengguna_id' => $user->id,
+            'nama' => $request->name,
+            'usia' => $request->age,
+            'kampus_id' => $request->campus_id,
+            'divisi_id' => $request->division_id,
+            'tanggal_mulai' => $request->start_date,
+            'tanggal_selesai' => $request->end_date,
         ];
         Employee::create($employeeDetails);
         
@@ -90,7 +90,7 @@ class EmployeeController extends Controller
             'end_date' => 'required',
             'email' => [
                 'required',
-                Rule::unique('users')->ignore($employee->user->id),
+                Rule::unique('pengguna')->ignore($employee->user->id),
             ],
         ], [
             'name.required' => 'Nama wajib diisi!',
@@ -102,20 +102,20 @@ class EmployeeController extends Controller
             'email.required' => 'Email wajib diisi!',
             'email.unique' => 'Email sudah digunakan oleh pengguna lain.',
         ]);
-        $employee->name = $request->name;
-        $employee->age = $request->age;
-        $employee->campus_id = $request->campus_id;
-        $employee->division_id = $request->division_id;
-        $employee->start_date = $request->start_date;
-        $employee->end_date = $request->end_date;
+        $employee->nama = $request->name;
+        $employee->usia = $request->age;
+        $employee->kampus_id = $request->campus_id;
+        $employee->divisi_id = $request->division_id;
+        $employee->tanggal_mulai = $request->start_date;
+        $employee->tanggal_selesai = $request->end_date;
 
         $employee->save();
 
         if ($employee->user) {
-            $employee->user->name = $request->input('name');
+            $employee->user->nama = $request->input('name');
             $employee->user->email = $request->input('email');
             if ($request->filled('password')) {
-                $employee->user->password = Hash::make($request->input('password'));
+                $employee->user->kata_sandi = Hash::make($request->input('password'));
             }
             $employee->user->save();
         }
@@ -152,16 +152,16 @@ class EmployeeController extends Controller
     }
 
     public function attendanceByDate($date) {
-        $employees = DB::table('employees')
-        ->select('employees.id', 'employees.name', 'employees.division_id', 'division.name AS division_name')
-        ->leftJoin('division', 'employees.division_id', '=', 'division.id')
+        $employees = DB::table('karyawan')
+        ->select('karyawan.id', 'karyawan.nama', 'karyawan.divisi_id', 'divisi.nama AS division_nama')
+        ->leftJoin('divisi', 'karyawan.divisi_id', '=', 'divisi.id')
         ->get();
 
         $attendances = Attendance::all()->filter(function($attendance, $key) use ($date){
-            return $attendance->created_at->dayOfYear == $date->dayOfYear;
+            return Carbon::parse($attendance->tanggal)->isSameDay($date);
         });
         return $employees->map(function($employee, $key) use($attendances) {
-            $attendance = $attendances->where('employee_id', $employee->id)->first();
+            $attendance = $attendances->where('karyawan_id', $employee->id)->first();
             $employee->attendanceToday = $attendance;
             return $employee;
         });
@@ -169,9 +169,8 @@ class EmployeeController extends Controller
 
     public function updateval(Request $request, $id){
         $employees = Attendance::find($id);
-        $employees->entry_status = $request->entry_status;
-        $employees->exit_status = $request->exit_status;
-        $employees->registered = $request->registered;
+        $employees->status_masuk = $request->entry_status;
+        $employees->status_keluar = $request->exit_status;
         $employees->save();
 
         Alert::success('Success', 'Data berhasil diubah!');
@@ -180,16 +179,24 @@ class EmployeeController extends Controller
 
     public function destroy($employee_id) {
         $employee = Employee::findOrFail($employee_id);
-        $user = User::findOrFail($employee->user_id);
+        $user = User::findOrFail($employee->pengguna_id);
         // detaches all the roles
-        DB::table('leaves')->where('employee_id', '=', $employee_id)->delete();
-        DB::table('attendances')->where('employee_id', '=', $employee_id)->delete();
-        DB::table('weeklyreports')->where('employee_id', '=', $employee_id)->delete();
+        DB::table('cuti')->where('karyawan_id', '=', $employee_id)->delete();
+        DB::table('kehadiran')->where('karyawan_id', '=', $employee_id)->delete();
+        DB::table('laporan_mingguan')->where('karyawan_id', '=', $employee_id)->delete();
+        // Hapus data expenses hanya jika tabel tersedia
+        if (Schema::hasTable('expenses')) {
+            if (Schema::hasColumn('expenses', 'karyawan_id')) {
+                DB::table('expenses')->where('karyawan_id', '=', $employee_id)->delete();
+            } elseif (Schema::hasColumn('expenses', 'employee_id')) {
+                DB::table('expenses')->where('employee_id', '=', $employee_id)->delete();
+            }
+        }
         $employee->delete();
-        $user->roles()->detach();
+        $user->peran()->detach();
         // deletes the users
         $user->delete();
-        Alert::success('Success', 'Data berhasil di hapus!');
+        Alert::success('Success', 'Data berhasil dihapus!');
         return redirect()->route('admin.employees.index');
     }
 

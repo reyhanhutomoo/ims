@@ -15,11 +15,13 @@ use RealRashid\SweetAlert\Facades\Alert;
 class LeaveController extends Controller
 {
     public function index() {
-        $employee = Auth::user()->employee;
+        $employee = Auth::user()?->employee;
+
         $data = [
             'employee' => $employee,
-            'leaves' => $employee->leave
+            'leaves' => $employee?->leave ?? collect()
         ];
+
         return view('employee.leaves.index')->with($data);
     }
     public function create() {
@@ -120,10 +122,10 @@ class LeaveController extends Controller
         }
         
         $values = [
-            'employee_id' => $employee_id,
-            'reason' => $request->input('reason'),
-            'description' => $request->input('description'),
-            'half_day' => $request->input('half-day')
+            'karyawan_id' => $employee_id,
+            'alasan' => $request->input('reason'),
+            'deskripsi' => $request->input('description'),
+            'setengah_hari' => $request->input('half-day')
         ];
         if ($request->hasFile('evidence')) {
             $file = $request->file('evidence');
@@ -131,14 +133,14 @@ class LeaveController extends Controller
             $originalFileName = $file->getClientOriginalName();
             $fileName = "{$currentDate}_{$originalFileName}.pdf";
             Storage::putFileAs('public/evidence_file', $file, $fileName);
-            $values['evidence'] = $fileName;
+            $values['bukti'] = $fileName;
         }
         if($request->input('multiple-days') == 'yes') {
             [$start, $end] = explode(' - ', $request->input('date_range'));
-            $values['start_date'] = Carbon::parse($start);
-            $values['end_date'] = Carbon::parse($end);
+            $values['tanggal_mulai'] = Carbon::parse($start);
+            $values['tanggal_selesai'] = Carbon::parse($end);
         } else {
-            $values['start_date'] = Carbon::parse($request->input('date'));
+            $values['tanggal_mulai'] = Carbon::parse($request->input('date'));
         }
         Leave::create($values);
         Alert::success('Success', 'Pengajuan Cuti Anda berhasil, tunggu persetujuan atasan.');
@@ -167,17 +169,17 @@ class LeaveController extends Controller
             ]);
         }
 
-        $leave->reason = $request->reason;
-        $leave->description = $request->description;
-        $leave->half_day = $request->input('half-day');
+        $leave->alasan = $request->reason;
+        $leave->deskripsi = $request->description;
+        $leave->setengah_hari = $request->input('half-day');
         if($request->input('multiple-days') == 'yes') {
             [$start, $end] = explode(' - ', $request->input('date_range'));
             $start = Carbon::parse($start);
             $end = Carbon::parse($end);
-            $leave->start_date = $start;
-            $leave->end_date = $end;
+            $leave->tanggal_mulai = $start;
+            $leave->tanggal_selesai = $end;
         } else {
-            $leave->start_date = Carbon::parse($request->input('date'));
+            $leave->tanggal_mulai = Carbon::parse($request->input('date'));
         }
         $leave->save();
 
@@ -187,8 +189,8 @@ class LeaveController extends Controller
 
     public function destroy($id) {
         $leave = Leave::findOrFail($id);
-        if ($leave->evidence) {
-            Storage::delete('public/evidence_file/' . $leave->evidence);
+        if ($leave->bukti) {
+            Storage::delete('public/evidence_file/' . $leave->bukti);
         }
         Gate::authorize('employee-leaves-access', $leave);
         $leave->delete();

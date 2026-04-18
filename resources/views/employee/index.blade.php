@@ -38,7 +38,7 @@
             <p class="lead">Dibuat untuk melakukan absensi karyawan magang</p>
             <hr class="my-4">
             <p>Silahkan Mulai Absensi,
-              {{ $employee->name }}
+              {{ optional($employee)->nama ?? Auth::user()->nama }}
             </p>
           </div>
         </div>

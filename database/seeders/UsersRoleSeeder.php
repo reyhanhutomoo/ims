@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\RoleUser;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,18 +14,19 @@ class UsersRoleSeeder extends Seeder
      */
     public function run()
     {
-        $roleuser = [
-            [
-                'role_id' => 1,
-                'user_id' => 1,
-            ],
-            [
-                'role_id' => 2,
-                'user_id' => 2,
-            ],
-        ];
-        foreach($roleuser as $key => $value){
-            RoleUser::create($value);
+        // Hubungkan pengguna dengan peran menggunakan relasi pivot 'peran_pengguna'
+        $admin = \App\User::where('email', 'admin@gmail.com')->first();
+        $roleAdmin = \App\Role::where('nama', 'admin')->first();
+
+        if ($admin && $roleAdmin) {
+            $admin->peran()->syncWithoutDetaching([$roleAdmin->id]);
+        }
+
+        $employee = \App\User::where('email', 'alfarizy@gmail.com')->first();
+        $roleEmployee = \App\Role::where('nama', 'employee')->first();
+
+        if ($employee && $roleEmployee) {
+            $employee->peran()->syncWithoutDetaching([$roleEmployee->id]);
         }
     }
 }

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Attendance;
 use App\Holiday;
 use App\Rules\DateRange;
-use App\StatusAtten;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,9 +30,46 @@ class AttendanceController extends Controller
 
     public function location(Request $request)
     {
-        $response = Http::get('https://nominatim.openstreetmap.org/reverse?format=geojson&lat='.$request->lat.'&lon='.$request->lon);
+        try {
+            $lat = $request->lat;
+            $lon = $request->lon;
 
-        return $response->json()['features'][0]['properties']['display_name'];
+            if (!is_numeric($lat) || !is_numeric($lon)) {
+                return response()->json(['message' => 'Koordinat tidak valid'], 422);
+            }
+
+            // Use Nominatim reverse with JSON format for a simpler response structure
+            $response = Http::withHeaders([
+                'User-Agent' => 'IMS Attendance/1.0 (+https://example.com)'
+            ])->get('https://nominatim.openstreetmap.org/reverse', [
+                'format' => 'json',
+                'lat' => $lat,
+                'lon' => $lon,
+                'zoom' => 16,
+                'addressdetails' => 1,
+            ]);
+
+            if (!$response->ok()) {
+                return response()->json(['message' => 'Gagal mengambil lokasi: HTTP ' . $response->status()], $response->status());
+            }
+
+            $json = $response->json();
+            // Prefer display_name; fallback to a composed address
+            $display = $json['display_name'] ?? null;
+            if (!$display) {
+                $addr = $json['address'] ?? [];
+                $parts = [
+                    $addr['city'] ?? $addr['town'] ?? $addr['village'] ?? $addr['hamlet'] ?? null,
+                    $addr['state'] ?? null,
+                    $addr['country'] ?? null,
+                ];
+                $display = implode(', ', array_filter($parts)) ?: 'Lokasi tidak diketahui';
+            }
+
+            return response($display, 200);
+        } catch (\Throwable $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 
     // public function location(Request $request)
@@ -67,8 +103,10 @@ class AttendanceController extends Controller
         if($last_attendance) {
             if($last_attendance->created_at->format('d') == Carbon::now()->format('d')){
                 $data['attendance'] = $last_attendance;
-                if($last_attendance->registered)
+                // Tanda sudah registrasi: belum melakukan keluar (waktu_keluar masih null)
+                if(is_null($last_attendance->waktu_keluar)) {
                     $data['registered_attendance'] = 'yes';
+                }
             }
         }
         return view('employee.attendance.create')->with($data);   
@@ -79,26 +117,16 @@ class AttendanceController extends Controller
         $entry_ip = $request->ip();
         $entry_location = $request->entry_location;
 
-        // Ambil daftar IP dan lokasi yang diizinkan dari tabel LocationAttendance
-        $allowedLocations = StatusAtten::all(); // Ambil semua data lokasi
-
-        // Set default status
-        $entry_status = 'Invalid';
-
-        // Periksa kecocokan IP dan/atau lokasi dengan data di tabel LocationAttendance
-        foreach ($allowedLocations as $location) {
-            if ($entry_ip === $location->ip || $entry_location === $location->location) {
-                $entry_status = 'Valid';
-                break; // Keluar dari loop jika sudah ada kecocokan
-            }
-        }
+        // Penentuan status tanpa validasi IP/lokasi (fitur ip_lokasi dihapus)
+        $entry_status = 'Valid';
 
         $attendance = new Attendance([
-            'employee_id' => $employee_id,
-            'entry_ip' => $request->ip(),
-            'time' => date('H'),
-            'entry_location' => $request->entry_location,
-            'entry_status' => $entry_status,
+            'karyawan_id' => $employee_id,
+            'tanggal' => Carbon::now()->toDateString(),
+            'waktu_masuk' => Carbon::now()->toTimeString(),
+            'ip_masuk' => $entry_ip,
+            'lokasi_masuk' => $entry_location,
+            'status_masuk' => $entry_status,
         ]);
         $attendance->save();
         if(date('h')<=9) {
@@ -120,33 +148,16 @@ class AttendanceController extends Controller
         $exit_ip = $request->ip();
         $exit_location = $request->exit_location;
 
-        // Ambil daftar IP dan lokasi yang diizinkan dari tabel LocationAttendance
-        $allowedLocations = StatusAtten::all(); // Ambil semua data lokasi
-
-        // Set default status
-        $exit_status = 'Invalid';
-
-        // Periksa kecocokan IP dan/atau lokasi dengan data di tabel LocationAttendance
-        foreach ($allowedLocations as $location) {
-            if ($exit_ip === $location->ip || $exit_location === $location->location) {
-                $exit_status = 'Valid';
-                break; // Keluar dari loop jika sudah ada kecocokan
-            }
-        }
+        // Penentuan status tanpa validasi IP/lokasi (fitur ip_lokasi dihapus)
+        $exit_status = 'Valid';
         
-        $registered = 'Membutuhkan Validasi';
-        foreach ($allowedLocations as $location) {
-            if ($exit_ip === $location->ip || $exit_location === $location->location) {
-                $registered = 'Hadir';
-                break; // Keluar dari loop jika sudah ada kecocokan
-            }
-        }
+        // Status 'registered' dihapus pada skema baru; gunakan status_masuk/keluar pada tabel kehadiran.
 
-        $attendance->exit_ip = $request->ip();
-        $attendance->exit_location = $request->exit_location;
-        $attendance->registered = $registered;
-        $attendance->exit_status = $exit_status;
-        $attendance->daily_report = $request->daily_report;
+        $attendance->ip_keluar = $exit_ip;
+        $attendance->lokasi_keluar = $exit_location;
+        $attendance->status_keluar = $exit_status;
+        $attendance->laporan_harian = $request->daily_report;
+        $attendance->waktu_keluar = Carbon::now()->toTimeString();
         $attendance->save();
         Alert::success('Success', 'Absensi Anda berhasil diakhiri');
         return redirect()->route('employee.attendance.create')->with('employee', Auth::user()->employee);
@@ -247,14 +258,14 @@ class AttendanceController extends Controller
         if ($leaves->count() != 0) {
             $leaves = $leaves->filter(function($leave, $key) use ($date) {
                 // checks if the end date has a value
-                if($leave->end_date) {
+                if($leave->tanggal_selesai) {
                     // if it does then checks if the $date falls between the leave range
-                    $condition1 = intval($date->dayOfYear) >= intval($leave->start_date->dayOfYear);
-                    $condition2 = intval($date->dayOfYear) <= intval($leave->end_date->dayOfYear);
+                    $condition1 = intval($date->dayOfYear) >= intval($leave->tanggal_mulai->dayOfYear);
+                    $condition2 = intval($date->dayOfYear) <= intval($leave->tanggal_selesai->dayOfYear);
                     return $condition1 && $condition2;
                 }
                 // else checks if this day is a leave
-                return $date->dayOfYear == $leave->start_date->dayOfYear;
+                return $date->dayOfYear == $leave->tanggal_mulai->dayOfYear;
             });
         }
         return $leaves->count();
@@ -264,14 +275,14 @@ class AttendanceController extends Controller
         if ($holidays->count() != 0) {
             $holidays = $holidays->filter(function($holiday, $key) use ($date) {
                 // checks if the end date has a value
-                if($holiday->end_date) {
+                if($holiday->tanggal_selesai) {
                     // if it does then checks if the $date falls between the holiday range
-                    $condition1 = intval($date->dayOfYear) >= intval($holiday->start_date->dayOfYear);
-                    $condition2 = intval($date->dayOfYear) <= intval($holiday->end_date->dayOfYear);
+                    $condition1 = intval($date->dayOfYear) >= intval($holiday->tanggal_mulai->dayOfYear);
+                    $condition2 = intval($date->dayOfYear) <= intval($holiday->tanggal_selesai->dayOfYear);
                     return $condition1 && $condition2;
                 }
                 // else checks if this day is a holiday
-                return $date->dayOfYear == $holiday->start_date->dayOfYear;
+                return $date->dayOfYear == $holiday->tanggal_mulai->dayOfYear;
             });
         }
         return $holidays->count();
@@ -295,11 +306,11 @@ class AttendanceController extends Controller
     public function leavesOfRange($leaves, $start, $end) {
         return $leaves->filter(function($leave, $key) use ($start, $end) {
             // checks if the start date is between the range
-            $condition1 = (intval($start->dayOfYear) <= intval($leave->start_date->dayOfYear)) && (intval($end->dayOfYear) >= intval($leave->start_date->dayOfYear));
+            $condition1 = (intval($start->dayOfYear) <= intval($leave->tanggal_mulai->dayOfYear)) && (intval($end->dayOfYear) >= intval($leave->tanggal_mulai->dayOfYear));
             // checks if the end date is between the range
             $condition2 = false;
-            if($leave->end_date)
-                $condition2 = (intval($start->dayOfYear) <= intval($leave->end_date->dayOfYear)) && (intval($end->dayOfYear) >= intval($leave->end_date->dayOfYear));
+            if($leave->tanggal_selesai)
+                $condition2 = (intval($start->dayOfYear) <= intval($leave->tanggal_selesai->dayOfYear)) && (intval($end->dayOfYear) >= intval($leave->tanggal_selesai->dayOfYear));
             // checks if the leave status is approved
             $condition3 = $leave->status == 'diterima';
             // combining all the conditions
@@ -318,11 +329,11 @@ class AttendanceController extends Controller
     public function holidaysOfRange($holidays, $start, $end) {
         return $holidays->filter(function($holiday, $key) use ($start, $end) {
             // checks if the start date is between the range
-            $condition1 = (intval($start->dayOfYear) <= intval($holiday->start_date->dayOfYear)) && (intval($end->dayOfYear) >= intval($holiday->start_date->dayOfYear));
+            $condition1 = (intval($start->dayOfYear) <= intval($holiday->tanggal_mulai->dayOfYear)) && (intval($end->dayOfYear) >= intval($holiday->tanggal_mulai->dayOfYear));
             // checks if the end date is between the range
             $condition2 = false;
-            if($holiday->end_date)
-                $condition2 = (intval($start->dayOfYear) <= intval($holiday->end_date->dayOfYear)) && (intval($end->dayOfYear) >= intval($holiday->end_date->dayOfYear));
+            if($holiday->tanggal_selesai)
+                $condition2 = (intval($start->dayOfYear) <= intval($holiday->tanggal_selesai->dayOfYear)) && (intval($end->dayOfYear) >= intval($holiday->tanggal_selesai->dayOfYear));
             return  ($condition1 || $condition2);
         });
     }

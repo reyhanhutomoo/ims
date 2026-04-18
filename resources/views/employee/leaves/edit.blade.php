@@ -46,7 +46,7 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="">Alasan</label>
-                                    <input type="text" name="reason" value="{{ $leave->reason }}" class="form-control">
+                                    <input type="text" name="reason" value="{{ $leave->alasan }}" class="form-control">
                                     @error('reason')
                                     <div class="text-danger">
                                         {{ $message }}
@@ -55,14 +55,14 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="">Deskripsi</label>
-                                    <textarea name="description" class="form-control" >{{ $leave->description }}</textarea>
+                                    <textarea name="description" class="form-control" >{{ $leave->deskripsi }}</textarea>
                                     @error('description')
                                     <div class="text-danger">
                                         {{ $message }}
                                     </div>
                                     @enderror
                                 </div>
-                                @if ($leave->end_date)
+                                @if ($leave->tanggal_selesai)
                                     <div class="form-group">
                                         <label>Lebih dari satu hari ?</label>
                                         <select class="form-control" name="multiple-days" onchange="showDate()">
@@ -101,12 +101,12 @@
                                     <div class="form-group" id="half-day">
                                         <label>Setengah Hari Kerja</label>
                                         <select class="form-control" name="half-day">
-                                            @if ($leave->half_day == "no")
+                                            @if ($leave->setengah_hari == "no")
                                                 <option value="no" selected>Tidak</option>
-                                                <option value="yes">Ya</option>    
+                                                <option value="yes">Ya</option>
                                             @else
                                             <option value="no" >Tidak</option>
-                                            <option value="yes" selected>Ya</option>    
+                                            <option value="yes" selected>Ya</option>
                                             @endif
                                         </select>
                                     </div>
@@ -143,9 +143,9 @@
 
 <script>
     $(document).ready(function() {
-        startDate = moment('{{ $leave->start_date }}');
-        if('{{ $leave->end_date }}') {
-            endDate = new Date('{{ $leave->end_date }}');
+        startDate = moment('{{ $leave->tanggal_mulai }}');
+        if('{{ $leave->tanggal_selesai }}') {
+            endDate = new Date('{{ $leave->tanggal_selesai }}');
             $('#date_range').daterangepicker({
                 "startDate": startDate,
                 "endDate": endDate,

@@ -6,9 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="{{ asset('/') }}css/style.css" rel="stylesheet" />
+    <style>
+        .btn-back {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+    </style>
 </head>
     <body>
+        <a href="{{ route('welcome') }}" class="btn btn-light btn-back">
+            <i class="fas fa-arrow-left"></i> Kembali
+        </a>
         <section class="login-block">
             <div class="container">
                 <div class="row">
@@ -22,7 +34,7 @@
                                 <div class="card-block">
                                     <div class="row m-b-20">
                                         <div class="col-md-12">
-                                            <h3 class="text-center font-weight-bold">INTERNSHIP MANAGEMENT SISTEM</h3>
+                                            <h3 class="text-center font-weight-bold">INTERNSHIP MANAGEMENT SYSTEM</h3>
                                         </div>
                                     </div>
                                     <div class="form-group form-primary">

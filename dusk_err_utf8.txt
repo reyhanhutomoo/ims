@@ -1,0 +1,83 @@
+﻿Warning: TTY mode is not supported on Windows platform.
+PHPUnit 9.6.22 by Sebastian Bergmann and contributors.
+
+.FFFF..FEE                                                        10 / 10 (100%)
+
+Time: 01:06.798, Memory: 40.00 MB
+
+There were 2 errors:
+
+1) Tests\Browser\ExampleTest::testPublicMOASearch
+InvalidArgumentException: Unable to locate button [Search].
+
+C:\laragon\www\ims\vendor\laravel\dusk\src\ElementResolver.php:248
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\InteractsWithElements.php:332
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:205
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\ProvidesBrowser.php:69
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:202
+
+2) Tests\Browser\ExampleTest::testMOAValidationErrors
+InvalidArgumentException: Unable to locate button [Submit].
+
+C:\laragon\www\ims\vendor\laravel\dusk\src\ElementResolver.php:248
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\InteractsWithElements.php:332
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:220
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\ProvidesBrowser.php:69
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:217
+
+--
+
+There were 5 failures:
+
+1) Tests\Browser\ExampleTest::testMOAEmployeeDashboardAccess
+Did not see expected text [Dashboard Employee] within element [body].
+Failed asserting that false is true.
+
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\MakesAssertions.php:179
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\MakesAssertions.php:152
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:58
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\ProvidesBrowser.php:69
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:51
+
+2) Tests\Browser\ExampleTest::testMOASubmissionForm
+Did not see expected text [Submit] within element [body].
+Failed asserting that false is true.
+
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\MakesAssertions.php:179
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\MakesAssertions.php:152
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:76
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\ProvidesBrowser.php:69
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:69
+
+3) Tests\Browser\ExampleTest::testMOAFileUpload
+Did not see expected text [File dipilih] within element [body].
+Failed asserting that false is true.
+
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\MakesAssertions.php:179
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\MakesAssertions.php:152
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:103
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\ProvidesBrowser.php:69
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:82
+
+4) Tests\Browser\ExampleTest::testMOATrackingNumberDisplay
+Did not see expected text [Detail MOA/IA] within element [body].
+Failed asserting that false is true.
+
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\MakesAssertions.php:179
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\MakesAssertions.php:152
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:124
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\ProvidesBrowser.php:69
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:121
+
+5) Tests\Browser\ExampleTest::testPublicMOAList
+Did not see expected text [Dokumen MOA/IA Tersedia] within element [body].
+Failed asserting that false is true.
+
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\MakesAssertions.php:179
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\MakesAssertions.php:152
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:183
+C:\laragon\www\ims\vendor\laravel\dusk\src\Concerns\ProvidesBrowser.php:69
+C:\laragon\www\ims\tests\Browser\ExampleTest.php:181
+
+ERRORS!
+Tests: 10, Assertions: 22, Errors: 2, Failures: 5.

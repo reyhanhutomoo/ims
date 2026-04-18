@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Attendance;
-use App\Department;
+use App\Division;
 use App\Employee;
 use App\Http\Controllers\Controller;
 use App\Role;
@@ -45,23 +45,16 @@ class Register2Controller extends Controller
             'password' => 'required|confirmed|min:6'
         ]);
         $user = User::create([
-            'name' => $request->first_name.' '.$request->last_name,
+            'nama' => $request->first_name.' '.$request->last_name,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'kata_sandi' => Hash::make($request->password)
         ]);
-        $employeeRole = Role::where('name', 'employee')->first();
-        $user->roles()->attach($employeeRole);
+        $employeeRole = Role::where('nama', 'employee')->first();
+        $user->peran()->attach($employeeRole);
         $employeeDetails = [
-            'user_id' => $user->id, 
-            'first_name' => $request->first_name, 
-            'last_name' => $request->last_name,
-            'sex' => $request->sex, 
-            'dob' => $request->dob, 
-            'join_date' => $request->join_date,
-            'desg' => $request->desg, 
-            'department_id' => $request->department_id, 
-            'salary' => $request->salary, 
-            'photo'  => 'user.png'
+            'pengguna_id' => $user->id,
+            'nama' => trim(($request->first_name ?? '') . ' ' . ($request->last_name ?? '')),
+            'foto'  => 'user.png'
         ];
         // Photo upload
         if ($request->hasFile('photo')) {
@@ -80,7 +73,7 @@ class Register2Controller extends Controller
             $image_resize = Image::make($image->getRealPath());              
             $image_resize->resize(300, 300);
             $image_resize->save(public_path(DIRECTORY_SEPARATOR.'storage'.DIRECTORY_SEPARATOR.'employee_photos'.DIRECTORY_SEPARATOR.$filename_store));
-            $employeeDetails['photo'] = $filename_store;
+            $employeeDetails['foto'] = $filename_store;
         }
         
         Employee::create($employeeDetails);
@@ -106,27 +99,27 @@ class Register2Controller extends Controller
     }
 
     public function attendanceByDate($date) {
-        $employees = DB::table('employees')->select('id', 'first_name', 'last_name', 'desg', 'department_id')->get();
+        $employees = DB::table('karyawan')->select('id', 'nama', 'divisi_id')->get();
         $attendances = Attendance::all()->filter(function($attendance, $key) use ($date){
-            return $attendance->created_at->dayOfYear == $date->dayOfYear;
+            return \Carbon\Carbon::parse($attendance->tanggal)->isSameDay($date);
         });
         return $employees->map(function($employee, $key) use($attendances) {
-            $attendance = $attendances->where('employee_id', $employee->id)->first();
+            $attendance = $attendances->where('karyawan_id', $employee->id)->first();
             $employee->attendanceToday = $attendance;
-            $employee->department = Department::find($employee->department_id)->name;
+            $employee->division = \App\Division::find($employee->divisi_id)->nama ?? null;
             return $employee;
         });
     }
 
     public function destroy($employee_id) {
         $employee = Employee::findOrFail($employee_id);
-        $user = User::findOrFail($employee->user_id);
+        $user = User::findOrFail($employee->pengguna_id);
         // detaches all the roles
-        DB::table('leaves')->where('employee_id', '=', $employee_id)->delete();
-        DB::table('attendances')->where('employee_id', '=', $employee_id)->delete();
-        DB::table('expenses')->where('employee_id', '=', $employee_id)->delete();
+        DB::table('cuti')->where('karyawan_id', '=', $employee_id)->delete();
+        DB::table('kehadiran')->where('karyawan_id', '=', $employee_id)->delete();
+        DB::table('expenses')->where('karyawan_id', '=', $employee_id)->delete();
         $employee->delete();
-        $user->roles()->detach();
+        $user->peran()->detach();
         // deletes the users
         $user->delete();
         request()->session()->flash('success', 'Karyawan berhasil dihapus!');

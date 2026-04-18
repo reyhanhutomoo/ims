@@ -43,7 +43,7 @@
                                 @foreach ($campuses as $index => $campus)
                                 <tr class="text-center">
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $campus->name }}</td>
+                                    <td>{{ $campus->nama }}</td>
                                     <td>
                                         <a href="" class="btn btn-warning" data-toggle="modal" data-target=".editCampus{{ $campus->id }}" title="Edit Kampus">Edit</a>
                                         <button 
@@ -139,7 +139,7 @@
                     @method('PUT')
                     <div class="form-group mb-3">
                         <label class="required-label faded-label" for="name">Nama Kampus</label>
-                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ $campus->name }}" placeholder="Masukkan Kampus">
+                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ $campus->nama }}" placeholder="Masukkan Kampus">
                         @error('name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

@@ -14,11 +14,8 @@ class RolesSeeder extends Seeder
      */
     public function run()
     {
-        Role::create([
-            'name' => 'admin',
-        ]);
-        Role::create([
-            'name' => 'employee',
-        ]);
+        // Gunakan kolom Bahasa Indonesia 'nama'
+        \App\Role::updateOrCreate(['nama' => 'admin'], ['deskripsi' => null]);
+        \App\Role::updateOrCreate(['nama' => 'employee'], ['deskripsi' => null]);
     }
 }

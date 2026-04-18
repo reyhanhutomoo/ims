@@ -63,7 +63,7 @@
         <p>
             Kelola
             <i class="fas fa-angle-left right"></i>
-            <span class="badge badge-info right">4</span>
+            <span class="badge badge-info right">3</span>
         </p>
     </a>
     <ul class="nav nav-treeview">
@@ -74,12 +74,6 @@
             <i class="fa fa-user nav-icon"></i>
             <p>Data Admin</p>
         </a>
-            <a
-                href="{{ route('admin.iploc.index') }}"
-                class="nav-link">
-                <i class="fa fa-location-arrow nav-icon"></i>
-                <p>IP dan Lokasi</p>
-            </a>
             <a
                 href="{{ route('admin.division.index') }}"
                 class="nav-link">
@@ -94,4 +88,17 @@
             </a>
         </li>
     </ul>
+</li>
+
+<li class="nav-item">
+    <a href="{{ route('admin.moa.dashboard') }}" class="nav-link {{ (request()->is('admin/moa/dashboard')) ? 'active' : '' }}">
+        <i class="nav-icon fas fa-chart-bar"></i>
+        <p>Dashboard MOA/IA</p>
+    </a>
+</li>
+<li class="nav-item">
+    <a href="{{ route('admin.moa.index') }}" class="nav-link {{ (request()->is('admin/moa') || request()->is('admin/moa/*')) ? 'active' : '' }}">
+        <i class="nav-icon fas fa-file-signature"></i>
+        <p>Review MOA/IA</p>
+    </a>
 </li>

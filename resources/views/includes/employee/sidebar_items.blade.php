@@ -28,6 +28,7 @@
         </li>
     </ul>
 </li>
+
 <li class="nav-item">
     <a href="{{ route('employee.weeklyreports.index') }}" class="nav-link">
         <i class="nav-icon fas fa-newspaper-o"></i>
@@ -65,4 +66,13 @@
             </a>
         </li>
     </ul>
+</li>
+
+<li class="nav-item">
+    <a href="{{ route('employee.moa.index') }}" class="nav-link {{ (request()->is('employee/moa*')) ? 'active' : '' }}">
+        <i class="nav-icon fas fa-file-contract"></i>
+        <p>
+            Pengajuan MOA/IA
+        </p>
+    </a>
 </li>

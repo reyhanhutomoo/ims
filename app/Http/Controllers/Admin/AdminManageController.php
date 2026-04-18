@@ -18,8 +18,8 @@ class AdminManageController extends Controller
     public function index(){
         $loggedInAdminId = Auth::id();
 
-        $users = User::whereHas('roles', function ($query) {
-            $query->where('name', 'admin');
+        $users = User::whereHas('peran', function ($query) {
+            $query->where('nama', 'admin');
         })
         ->where('id', '!=', $loggedInAdminId)
         ->get();
@@ -32,7 +32,7 @@ class AdminManageController extends Controller
     public function store(Request $request) {
         $this->validate($request, [
             'name' => 'required',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email|unique:pengguna,email',
             'password' => 'required|confirmed|min:6'
         ],[
             'name.required' => 'Nama wajib diisi!',
@@ -41,12 +41,12 @@ class AdminManageController extends Controller
             'password.required' => 'Password wajib diisi!',
         ]);
         $user = User::create([
-            'name' => $request->name,
+            'nama' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'kata_sandi' => Hash::make($request->password)
         ]);
-        $adminRole = Role::where('name', 'admin')->first();
-        $user->roles()->attach($adminRole);
+        $adminRole = Role::where('nama', 'admin')->first();
+        $user->peran()->attach($adminRole);
         
         Alert::success('Success', 'Data berhasil ditambahkan!');
         return redirect()->route('admin.admin.index');
@@ -57,7 +57,7 @@ class AdminManageController extends Controller
             'name' => 'required',
             'email' => [
                 'required',
-                Rule::unique('users')->ignore($id),
+                Rule::unique('pengguna')->ignore($id),
             ],
         ], [
             'name.required' => 'Nama wajib diisi!',
@@ -66,10 +66,10 @@ class AdminManageController extends Controller
         ]);
 
         $user = User::find($id);
-        $user->name = $request->name;
+        $user->nama = $request->name;
         $user->email = $request->email;
         if ($request->filled('password')) {
-            $user->password = Hash::make($request->password);
+            $user->kata_sandi = Hash::make($request->password);
         }
         $user->save();
         // if ($user->employee) {
@@ -83,10 +83,9 @@ class AdminManageController extends Controller
 
     public function destroy($id) {
         $users = User::findOrFail($id);
-        DB::table('users')->where('id', '=', $id)->delete();
-        $users->roles()->detach();
+        $users->peran()->detach();
         $users->delete();
-        Alert::success('Success', 'Data berhasil di hapus!');
+        Alert::success('Success', 'Data berhasil dihapus!');
         return redirect()->route('admin.admin.index');
     }
 }

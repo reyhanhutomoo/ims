@@ -84,7 +84,7 @@
                 </div>
                 <footer class="main-footer">
                     <strong
-                        >Dibuat &copy; April 2024
+                        >Dibuat &copy; November 2025
                     <div class="float-right d-none d-sm-inline-block">
                         <b>Versi</b> 1.0.0
                     </div>

@@ -47,12 +47,12 @@
                                 @foreach ($employees as $index => $employee)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $employee->name }}</td>
-                                    <td class="text-center">{{ $employee->age }}</td>
-                                    <td class="text-center">{{ $employee->campus->name }}</td>
-                                    <td class="text-center">{{ $employee->division->name }}</td>
-                                    <td class="text-center">{{ $employee->start_date }}</td>
-                                    <td class="text-center">{{ $employee->end_date }}</td>
+                                    <td>{{ $employee->nama }}</td>
+                                    <td class="text-center">{{ $employee->usia }}</td>
+                                    <td class="text-center">{{ $employee->campus->nama }}</td>
+                                    <td class="text-center">{{ $employee->division->nama }}</td>
+                                    <td class="text-center">{{ $employee->tanggal_mulai }}</td>
+                                    <td class="text-center">{{ $employee->tanggal_selesai }}</td>
                                     <td>
                                         <a href="{{ route('admin.employees.profile', $employee->id) }}" class="btn btn-info">Lihat Profil</a>
                                         <a href="" class="btn btn-warning" data-toggle="modal" data-target=".editEmployee{{ $employee->id }}" title="Edit Employee">Edit</a>
@@ -163,7 +163,7 @@
                         <label for="division_id">Division</label>
                         <select name="division_id" class="form-control">
                             @foreach ($division as $id => $name)
-                                <option value="{{ $name->id }}">{{ $name->name }}</option>
+                                <option value="{{ $name->id }}">{{ $name->nama }}</option>
                             @endforeach
                         </select>
                         @error('division_idx')
@@ -176,7 +176,7 @@
                         <label for="campus_id">Asal Kampus</label>
                         <select name="campus_id" class="form-control">
                             @foreach ($campus as $id => $name)
-                                <option value="{{ $name->id }}">{{ $name->name }}</option>
+                                <option value="{{ $name->id }}">{{ $name->nama }}</option>
                             @endforeach
                         </select>
                         @error('campus_id')
@@ -226,7 +226,7 @@
                     @method('PUT')
                     <div class="form-group mb-3">
                         <label class="required-label faded-label" for="name">Nama</label>
-                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ $employee->name }}" placeholder="Masukkan Nama">
+                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ $employee->nama }}" placeholder="Masukkan Nama">
                         @error('name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -235,7 +235,7 @@
                     </div>
                     <div class="form-group mb-3">
                         <label class="required-label faded-label" for="age">Umur</label>
-                        <input type="number" name="age" class="form-control @error('age') is-invalid @enderror" value="{{ $employee->age }}" placeholder="Masukkan Umur">
+                        <input type="number" name="age" class="form-control @error('age') is-invalid @enderror" value="{{ $employee->usia }}" placeholder="Masukkan Umur">
                         @error('age')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -253,7 +253,7 @@
                     </div>
                     <div class="form-group mb-3">
                         <label class="required-label faded-label" for="start_date">Tanggal Mulai Magang</label>
-                        <input type="date" name="start_date" id="start_date" class="form-control @error('start_date') is-invalid @enderror" value="{{ $employee->start_date }}" placeholder="Masukkan Periode Magang">
+                        <input type="date" name="start_date" id="start_date" class="form-control @error('start_date') is-invalid @enderror" value="{{ $employee->tanggal_mulai }}" placeholder="Masukkan Periode Magang">
                         @error('start_date')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -262,7 +262,7 @@
                     </div>
                     <div class="form-group mb-3">
                         <label class="required-label faded-label" for="end_date">Tanggal Selesai Magang</label>
-                        <input type="date" name="end_date" id="end_date" class="form-control @error('end_date') is-invalid @enderror" value="{{ $employee->end_date }}" placeholder="Masukkan Periode Magang">
+                        <input type="date" name="end_date" id="end_date" class="form-control @error('end_date') is-invalid @enderror" value="{{ $employee->tanggal_selesai }}" placeholder="Masukkan Periode Magang">
                         @error('end_date')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -273,7 +273,7 @@
                         <label class="required-label faded-label" for="division_id">Divisi Magang</label>
                         <select name="division_id" class="form-control">
                             @foreach ($division as $id => $name)
-                                <option value="{{ $name->id }}" {{ $name->id == $employee->division_id ? 'selected' : '' }}>{{ $name->name }}</option>
+                                <option value="{{ $name->id }}" {{ $name->id == $employee->divisi_id ? 'selected' : '' }}>{{ $name->nama }}</option>
                             @endforeach
                         </select>
                         @error('division')
@@ -286,7 +286,7 @@
                         <label class="required-label faded-label" for="campus_id">Asal Kampus</label>
                         <select name="campus_id" class="form-control">
                             @foreach ($campus as $id => $name)
-                            <option value="{{ $name->id }}" {{ $name->id == $employee->campus_id ? 'selected' : '' }}>{{ $name->name }}</option>
+                            <option value="{{ $name->id }}" {{ $name->id == $employee->kampus_id ? 'selected' : '' }}>{{ $name->nama }}</option>
                             @endforeach
                         </select>
                         @error('campus_id')
